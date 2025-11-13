@@ -1,0 +1,28 @@
+{
+  "name": "express",
+  "version": "1.0.0",
+  "description": "Proyecto de introducción a Express",
+  "type": "module",
+  "main": "index.js",
+  "repository": "http://prueba.express.com",
+  "author": "Alexi Dg",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "mongoose": "^8.19.3",
+    "mysql2": "^3.15.3",
+    "nodemon": "^3.1.10",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3"
+  }
+}

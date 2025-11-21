@@ -30,7 +30,7 @@ console.log('Static files are being served from the public directory', __dirname
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-  origin: 'http://127.0.0.1:5500'
+  origin: '*'
 }));
 
 // Routes

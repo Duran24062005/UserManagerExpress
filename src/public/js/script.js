@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async() => {
     console.log('Document loaded and parsed');
 
     const h1 = document.querySelector('h1');
@@ -14,4 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUser(params) {
         const user = null;
     }
+
+    async function getUsers(params) {
+        const url = `https://user-manager-express.vercel.app/api/users2/`;
+        const data  = await fetch(url);
+        let users = await data.json();
+        return users;
+    }
+
+    let usuarios = await getUsers()
+    console.log(usuarios);
+    
 });

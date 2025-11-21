@@ -1,13 +1,21 @@
 import { User } from '../models/users.model.js';
 
-
 // Rutas para renderizar vistas
-export async function getUsers (req, res) {
+export async function getUsers(req, res) {
     try {
         const result = await User.find();
-        res.render('users', { users: result, message: "Bienvenido" , type: "success" });
+        res.render('index', { 
+            users: result, 
+            message: "Bienvenido", 
+            type: "success" 
+        });
     } catch (error) {
-        console.log('Error de consulta ' + err);
+        console.log('Error de consulta: ' + error);
+        res.render('users', { 
+            users: [], 
+            message: "Error al cargar usuarios", 
+            type: "error" 
+        });
     }
 }
 
@@ -15,105 +23,154 @@ export function getCreateUser(req, res) {
     res.render('create-user');
 }
 
-export function getUpdateUser(req, res) {
-    const param = req.params.id;
-    console.log(param);
-    const sql = `SELECT * FROM users WHERE id = ?`;
-    connection.query(sql, param, (err, result) => {
-        if (err) {
-            console.log('Error: ' + err);
-        } else {
-            console.log(result);
-            res.render('update-user', {user: result});
-        }
-    });
-}
-
-export function getDeleteUser(req, res) {
-    const param = req.params.id;
-    console.log(param);
-    const sql = `SELECT * FROM users WHERE id = ?`;
-    connection.query(sql, param, (err, result) => {
-        if (err) {
-            console.log('Error: ' + err);
-        } else {
-            console.log(result);
-            res.render('delete-user', {user: result});
-        }
-    });
-}
-
-
-// Manejo de datos (API)
-export async function users (req, res) {
+export async function getUpdateUser(req, res) {
+    const id = req.params.id;
+    
     try {
-        const users = await User.find();
-        res.send(users);
+        const user = await User.findById(id);
+        
+        if (!user) {
+            return res.status(404).render('error', { 
+                message: 'Usuario no encontrado' 
+            });
+        }
+        
+        // Convertir a array para mantener compatibilidad con la vista
+        res.render('update-user', { user: [user] });
     } catch (error) {
-        console.log(err);
+        console.log('Error: ' + error);
+        res.status(500).render('error', { 
+            message: 'Error al cargar usuario' 
+        });
     }
 }
 
+export async function getDeleteUser(req, res) {
+    const id = req.params.id;
+    
+    try {
+        const user = await User.findById(id);
+        
+        if (!user) {
+            return res.status(404).render('error', { 
+                message: 'Usuario no encontrado' 
+            });
+        }
+        
+        // Convertir a array para mantener compatibilidad con la vista
+        res.render('delete-user', { user: [user] });
+    } catch (error) {
+        console.log('Error: ' + error);
+        res.status(500).render('error', { 
+            message: 'Error al cargar usuario' 
+        });
+    }
+}
 
-export function user(req, res) {
-    res.render('users', { users: usersData, message: "Bienvenido" , type: "success" });
+// Manejo de datos (API)
+export async function users(req, res) {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        console.log('Error: ' + error);
+        res.status(500).json({ 
+            error: 'Error al obtener usuarios' 
+        });
+    }
+}
+
+export async function user(req, res) {
+    try {
+        const id = req.params.id;
+        const user = await User.findById(id);
+        
+        if (!user) {
+            return res.status(404).json({ 
+                error: 'Usuario no encontrado' 
+            });
+        }
+        
+        res.json(user);
+    } catch (error) {
+        console.log('Error: ' + error);
+        res.status(500).json({ 
+            error: 'Error al obtener usuario' 
+        });
+    }
 }
 
 export async function createUser(req, res) {
-    console.log(req.body);
-    console.log(typeof req.body.age);
-
     try {
-        const result = await User.insertOne(
-            req.body
-        );
-        res.redirect('/users2/all');
+        const { name, email, age } = req.body;
+        
+        // Crear nuevo usuario
+        const newUser = new User({
+            name,
+            email,
+            age: parseInt(age),
+            created_at: new Date()
+        });
+        
+        await newUser.save();
+        
+        res.redirect('/api/users2/all');
     } catch (error) {
-        console.log('Error: ' + err);
-    };
-}
-
-export async function updateUser(req, res) {
-    const id = req.params.id
-    const data = req.body;
-    console.log(data);
-
-    try {
-        await User.updateOne(
-            {_id: id},
-            {$set: {
-                name: data.name,
-                age: data.age,
-                email: data.email
-            }}
-        );
-        return res.redirect('/users2/all');
-    } catch (error) {
-        console.log(err);
+        console.log('Error: ' + error);
+        res.status(500).render('create-user', { 
+            message: 'Error al crear usuario', 
+            type: 'error' 
+        });
     }
 }
 
-export function deleteUser(req, res) {
-    const id = req.params.id;
-    const sql = `DELETE FROM users WHERE id = ${id}`;
-    connection.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            
-        } else {
-            return res.redirect('/api/users/all');
-        }
-    });
-    /*for (let i = 0; i < usersData.length; i++) {
-        if (usersData[i].id == id) {
-            usersData.splice(i, 1);
-            return res.render('users', { 
-                users: usersData, 
-                message: "User deleted successfully", 
-                type: 'success' 
+export async function updateUser(req, res) {
+    try {
+        const id = req.params.id;
+        const { name, email, age } = req.body;
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            {
+                name,
+                email,
+                age: parseInt(age)
+            },
+            { new: true, runValidators: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ 
+                error: 'Usuario no encontrado' 
             });
-        } else {
-            return res.status(404).send('User not found');
         }
-    }*/
+        
+        res.redirect('/api/users2/all');
+    } catch (error) {
+        console.log('Error: ' + error);
+        res.status(500).json({ 
+            error: 'Error al actualizar usuario' 
+        });
+    }
+}
+
+export async function deleteUser(req, res) {
+    try {
+        const id = req.params.id;
+        
+        const deletedUser = await User.findByIdAndDelete(id);
+        
+        if (!deletedUser) {
+            return res.status(404).json({ 
+                error: 'Usuario no encontrado' 
+            });
+        }
+        
+        res.redirect('/api/users2/all');
+    } catch (error) {
+        console.log('Error: ' + error);
+        res.status(500).json({ 
+            error: 'Error al eliminar usuario' 
+        });
+    }
 }

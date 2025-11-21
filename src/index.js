@@ -7,6 +7,7 @@ import connection from './connection.js';
 import { connection2 } from './mongo.connect.js';
 import userRouter2 from './routes/users2.routes.js';
 import cors from "cors";
+import { getUsers } from './controller/users2.controller.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,12 +34,12 @@ app.use(cors({
 }));
 
 // Routes
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   res.render('index');
 });
 
 app.use('/api/users', userRouter);
-app.use('/users2/', userRouter2);
+app.use('/api/users2/', userRouter2);
 
 app.listen(app.get('port'), () => {
   console.log(`${app.get('title')} app listening at http://localhost:${app.get('port')}`);

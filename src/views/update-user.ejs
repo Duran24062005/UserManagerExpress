@@ -10,7 +10,7 @@
 <body>
     <h1>Update usuario</h1>
     <div class="form-container">
-        <form action="/api/users/up/<%= user[0].id %>" method="POST">
+        <form action="/api/users2/up/<%= user[0].id %>" method="POST">
             <label for="name">Nombre</label>
             <input type="text" id="name" name="name" value="<%= user[0].name %>">
     
@@ -20,7 +20,7 @@
             <label for="email">Email</label>
             <input type="email" name="email" id="email" value="<%= user[0].email %>">
             <div class="btn-container">
-                <button class="cancel"><a href="/api/users/all">Cancelar</a></button>
+                <button class="cancel"><a href="/api/users2/all">Cancelar</a></button>
                 <input type="submit" value="Registrar" class="submit">
             </div>
         </form>

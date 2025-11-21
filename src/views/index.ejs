@@ -15,7 +15,7 @@
     <% } %>
 
     <button class="btn-create">
-        <a href="/api/users/create">Crear Usuario</a>
+        <a href="/api/users2/create">Crear Usuario</a>
     </button>
 
     <table>
@@ -36,8 +36,8 @@
                     <td><%= user.name %></td>
                     <td><%= user.age %></td>
                     <td><%= user.email %></td>
-                    <td class="btn-update" id="btn-update"><a href="/api/users/update/<%= user.id %>">Modificar</a></td>
-                    <td class="btn-delete" id="btn-delete"><a href="/api/users/delete/<%= user.id %>">Eliminar</a></td>
+                    <td class="btn-update" id="btn-update"><a href="/api/users2/update/<%= user.id %>">Modificar</a></td>
+                    <td class="btn-delete" id="btn-delete"><a href="/api/users2/delete/<%= user.id %>">Eliminar</a></td>
                 </tr>
             <% }); %>
         </tbody>

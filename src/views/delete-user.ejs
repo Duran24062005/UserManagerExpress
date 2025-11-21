@@ -10,13 +10,13 @@
 <body>
     <h1>Eliminar usuario</h1>
     <div class="form-container">
-        <form action="/api/users/del/<%= user[0].id %>" method="POST">
+        <form action="/api/users2/del/<%= user[0].id %>" method="POST">
             <h2>¿Desea eliminar el usuario <strong><%= user[0].name %></strong>?</h2>
             <p><strong>Nombre:</strong> <%= user[0].name %></p>
             <p><strong>Edad:</strong> <%= user[0].age %></p>
             <p><strong>Email:</strong> <%= user[0].email %></p>
             <div class="btn-container">
-                <button class="cancel"><a href="/api/users/all">Cancelar</a></button>
+                <button class="cancel"><a href="/api/users2/all">Cancelar</a></button>
                 <input type="submit" value="Eliminar" class="delete">
             </div>
         </form>

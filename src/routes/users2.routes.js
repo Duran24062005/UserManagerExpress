@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { 
     getUsers,
+    getError,
     getCreateUser,
     getUpdateUser,
     getDeleteUser,
@@ -16,6 +17,8 @@ const userRouter2 = Router();
 
 // Rutas para renderizar vistas
 userRouter2.get('/all', getUsers);
+
+userRouter2.get('/error', getError);
 
 userRouter2.get('/create', getCreateUser);
 

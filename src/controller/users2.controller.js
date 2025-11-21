@@ -19,6 +19,10 @@ export async function getUsers(req, res) {
     }
 }
 
+export function getError(req, res) {
+    res.render('error')
+}
+
 export function getCreateUser(req, res) {
     res.render('create-user');
 }

@@ -10,7 +10,7 @@
 <body>
     <h1>Users</h1>
 
-    <% if (type) { %>
+    <% if (typeof type !== "undefined" && type) { %>
         <p class="<%= type %>"><%= message %></p>
     <% } %>
 
@@ -30,16 +30,18 @@
             </tr>
         </thead>
         <tbody>
-            <% users.forEach(user => { %>
-                <tr>
-                    <td><%= user.id %></td>
-                    <td><%= user.name %></td>
-                    <td><%= user.age %></td>
-                    <td><%= user.email %></td>
-                    <td class="btn-update" id="btn-update"><a href="/api/users2/update/<%= user.id %>">Modificar</a></td>
-                    <td class="btn-delete" id="btn-delete"><a href="/api/users2/delete/<%= user.id %>">Eliminar</a></td>
-                </tr>
-            <% }); %>
+            <% if (typeof users !== "undefined" && users) { %>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.age %></td>
+                        <td><%= user.email %></td>
+                        <td class="btn-update" id="btn-update"><a href="/api/users2/update/<%= user.id %>">Modificar</a></td>
+                        <td class="btn-delete" id="btn-delete"><a href="/api/users2/delete/<%= user.id %>">Eliminar</a></td>
+                    </tr>
+                <% }); %>
+            <% } %>
         </tbody>
     </table>
 

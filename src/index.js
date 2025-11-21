@@ -41,6 +41,11 @@ app.get('/', async (req, res) => {
 app.use('/api/users', userRouter);
 app.use('/api/users2/', userRouter2);
 
+// Pantalla de error personalizada
+app.use((req, res) => {
+  res.status(404).render("error");
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.get('title')} app listening at http://localhost:${app.get('port')}`);
 });
